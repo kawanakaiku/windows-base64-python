@@ -15,26 +15,24 @@ def main():
 
       else:
          if not os.path.exists(arg):
-            sys.stdout.write("%s: no such file or directory.\n" % arg)
+            sys.stderr.write("%s: no such file or directory.\n" % arg)
             sys.exit(1)
 
          elif os.path.isdir(arg):
-            sys.stdout.write("%s: a directory.\n" % arg)
+            sys.stderr.write("%s: a directory.\n" % arg)
             sys.exit(1)
 
          elif file:
-            sys.stdout.write("%s: more than two files specified.\n" % arg)
+            sys.stderr.write("%s: more than two files specified.\n" % arg)
             sys.exit(1)
 
          else:
-            sys.stdout.write("%s: error.\n" % arg)
+            sys.stderr.write("%s: error.\n" % arg)
             sys.exit(1)
 
 
    if file == "":
-      input = sys.stdin.buffer.read()
-
-
+         input = sys.stdin.buffer.read()
 
    else:
       input = open(file, "rb").read()
@@ -44,7 +42,7 @@ def main():
          output = base64.b64decode( input )
 
       except base64.binascii.Error:
-         sys.stdout.write("binascii.Error: invalid input")
+         sys.stderr.write("binascii.Error: invalid input\n")
          sys.exit(1)
 
    else:
@@ -54,7 +52,7 @@ def main():
       sys.stdout.buffer.write( output )
       
    except BrokenPipeError:
-      sys.stdout.write("BrokenPipeError: pipe broken")
+      sys.stderr.write("BrokenPipeError: pipe broken\n")
       sys.exit(1)
 
    sys.exit(0)
@@ -64,5 +62,9 @@ try:
    main()
 
 except KeyboardInterrupt:
-   sys.stdout.write("KeyboardInterrupt: exitting.")
+   sys.stderr.write("KeyboardInterrupt: exitting.\n")
+   sys.exit(1)
+
+except (PermissionError, Exception) as e:
+   sys.stderr.write(str(e) + "\n")
    sys.exit(1)

@@ -6,8 +6,10 @@ file = ""
 for arg in sys.argv[1:]:
    if arg == "-d":
       decode = True
+
    elif file == "" and os.path.isfile(arg):
       file = arg
+
    else:
       if not os.path.exists(arg):
          sys.stdout.write("%s: no such file or directory.\n" % arg)
@@ -32,7 +34,13 @@ else:
    input = open(file, "rb").read()
 
 if decode:
-   output = base64.b64decode( input )
+   try:
+      output = base64.b64decode( input )
+
+   except base64.binascii.Error:
+      sys.stdout.write("binascii.Error: invalid input")
+      sys.exit(1)
+
 else:
    output = base64.b64encode( input )
 

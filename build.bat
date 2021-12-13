@@ -1,0 +1,1 @@
+pyinstaller base64.py --onefile

@@ -49,8 +49,13 @@ def main():
 
    else:
       output = base64.b64encode( input )
-
-   sys.stdout.buffer.write( output )
+   
+   try:
+      sys.stdout.buffer.write( output )
+      
+   except BrokenPipeError:
+      sys.stdout.write("BrokenPipeError: pipe broken")
+      sys.exit(1)
 
    sys.exit(0)
 
